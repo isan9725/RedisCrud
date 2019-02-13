@@ -30,39 +30,32 @@ public class Main {
 	}
 
 	private static void update(Jedis jedis) {
+		
 		Scanner updateS = new Scanner(System.in);
 
 		System.out.println("ID a editar");
-		int id = updateS.nextInt();
-
-		System.out.println("¿Que desea editar?");
-		System.out.println("1. Nombre");
-		System.out.println("2. Apellido");
-		System.out.println("3. Email");
-		int seleccion = updateS.nextInt();
-
-		switch (seleccion) {
-			case 1:
-				System.out.println("Nuevo nombre: ");
-				String name = updateS.nextLine();
-				jedis.hset(String.valueOf(id), "name", name);
-				break;
-			case 2:
-				System.out.println("Nuevo apellido: ");
-				String lastName = updateS.nextLine();
-				jedis.hset(String.valueOf(id), "lastName", lastName);
-				break;
-			case 3:
-				System.out.println("Nuevo email: ");
-				String email = updateS.nextLine();
-				jedis.hset(String.valueOf(id), "email", email);
-				break;
-			default:
-				System.out.println("Seleccion incorrecta");
-				break;
+		String id = updateS.nextLine();
+		
+		if(jedis.exists(id)){
+			
+			System.out.println("Nuevo nombre: ");
+			String name = updateS.nextLine();
+			System.out.println();
+			
+			System.out.println("Nuevo apellido: ");
+			String lastName = updateS.nextLine();
+			System.out.println();
+			
+			System.out.println("Nuevo email: ");
+			String email = updateS.nextLine();
+			System.out.println();
+			
+			User newUser = new User(name, lastName, email, Integer.parseInt(id));
+			jedis.set(id, newUser.toString());
+			
+		}else {
+			System.out.println("No existe esa llave");
 		}
-
-
 	}
 
 	private static void delete(Jedis jedis) {
